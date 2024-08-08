@@ -22,6 +22,7 @@ export const b2cPolicies = {
   },
   authorityDomain: "stockhawkorg.b2clogin.com",
 };
+export const b2cScopes = import.meta.env.VITE_B2C_SCOPES?.split(" ") || [];
 
 export const msalConfig: Configuration = {
   auth: {
@@ -31,17 +32,7 @@ export const msalConfig: Configuration = {
     redirectUri: "/",
   },
 };
-// Add here scopes for id token to be used at MS Identity Platform endpoints.
+
 export const loginRequest: RedirectRequest = {
-  scopes: [
-    "https://stockhawkorg.onmicrosoft.com/api-gateway/Inventory.Read.All",
-    "https://stockhawkorg.onmicrosoft.com/api-gateway/Order.ReadWrite.All",
-    "https://stockhawkorg.onmicrosoft.com/api-gateway/Organization.Read.All",
-    "https://stockhawkorg.onmicrosoft.com/api-gateway/Product.ReadWrite.All",
-    "https://stockhawkorg.onmicrosoft.com/api-gateway/Supplier.ReadWrite.All",
-    "https://stockhawkorg.onmicrosoft.com/api-gateway/User.ReadWrite.All",
-  ],
-};
-export const graphConfig = {
-  graphMeEndpoint: "https://graph.microsoft.com/v1.0/me",
+  scopes: b2cScopes,
 };

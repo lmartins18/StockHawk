@@ -490,3 +490,6 @@ $RECYCLE.BIN/
 appsettings.Development.json
 # Rider files
 *.run.*
+# Other
+plantuml
+.run

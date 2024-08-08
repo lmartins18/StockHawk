@@ -2,21 +2,18 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
-
-// MSAL imports
 import {
   PublicClientApplication,
   EventType,
   EventMessage,
   AuthenticationResult,
 } from "@azure/msal-browser";
-import { msalConfig } from "./authConfig";
+import { b2cPolicies, msalConfig, b2cScopes } from './authConfig';
 import { HashRouter } from 'react-router-dom';
 
 export const msalInstance = new PublicClientApplication(msalConfig);
 
 msalInstance.initialize().then(() => {
-  // Account selection logic is app dependent. Adjust as needed for different use cases.
   const accounts = msalInstance.getAllAccounts();
   if (accounts.length > 0) {
     msalInstance.setActiveAccount(accounts[0]);
@@ -27,6 +24,12 @@ msalInstance.initialize().then(() => {
       const payload = event.payload as AuthenticationResult;
       const account = payload.account;
       msalInstance.setActiveAccount(account);
+    }
+    else if (event.eventType === EventType.LOGIN_FAILURE) {
+      if (event.error?.message.includes("AADB2C90118")) { // The user has forgotten their password.
+        const authority = b2cPolicies.authorities.resetPassword.authority;
+        msalInstance.loginRedirect({ scopes: b2cScopes, authority: authority })
+      }
     }
   });
 

@@ -1,38 +1,15 @@
 using Microsoft.EntityFrameworkCore;
+using StockHawk.Model;
 
 namespace StockHawk.DataAccess.Repositories;
-public abstract class BaseRepository<T> : IRepository<T> where T : class
+
+public abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
 {
     protected readonly StockHawkDbContext Context;
 
     protected BaseRepository(StockHawkDbContext context)
     {
-        this.Context = context;
-    }
-
-    public virtual IEnumerable<T> GetAll()
-    {
-        return Context.Set<T>();
-    }
-
-    public virtual T? GetById(int id)
-    {
-        return Context.Set<T>().Find(id);
-    }
-
-    public virtual void Add(T entity)
-    {
-        Context.Set<T>().Add(entity);
-    }
-
-    public virtual void Update(T entity)
-    {
-        Context.Set<T>().Update(entity);
-    }
-
-    public virtual void Delete(T entity)
-    {
-        Context.Set<T>().Remove(entity);
+        Context = context;
     }
 
     public virtual async Task<IEnumerable<T>> GetAllAsync()
@@ -48,11 +25,12 @@ public abstract class BaseRepository<T> : IRepository<T> where T : class
     public virtual async Task AddAsync(T entity)
     {
         await Context.Set<T>().AddAsync(entity);
+        await SaveChangesAsync();
     }
 
     public virtual async Task UpdateAsync(T entity)
     {
-        Context.Entry(entity).State = EntityState.Modified;
+        await Task.Run(() => Context.Set<T>().Update(entity));
         await SaveChangesAsync();
     }
 
@@ -62,6 +40,20 @@ public abstract class BaseRepository<T> : IRepository<T> where T : class
         await SaveChangesAsync();
     }
 
+    public virtual async Task DeactivateAsync(T entity)
+    {
+        var toDeactivate = await GetByIdAsync(entity.Id);
+        if (toDeactivate != null)
+        {
+            toDeactivate.IsDeleted = true;
+            await UpdateAsync(toDeactivate);
+        }
+    }
+    public virtual async Task<int> CountAsync() => await Context.Set<T>().CountAsync(p => !p.IsDeleted);
+
     private async Task<int> SaveChangesAsync()
-    => await Context.SaveChangesAsync();
+    {
+        return await Context.SaveChangesAsync();
+    }
+
 }

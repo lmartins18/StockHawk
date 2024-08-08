@@ -15,14 +15,14 @@ public static class DataAccessDependencyInjection
 
     private static void AddRepositories(this IServiceCollection services)
     {
-        services.AddScoped<ActivityLogRepository>();
-        services.AddScoped<CategoryRepository>();
-        services.AddScoped<CustomerRepository>();
-        services.AddScoped<OrderItemRepository>();
-        services.AddScoped<OrderRepository>();
-        services.AddScoped<OrganizationRepository>();
-        services.AddScoped<ProductRepository>();
-        services.AddScoped<RoleRepository>();
-        services.AddScoped<SupplierRepository>();
+        services.AddDbContext<StockHawkDbContext>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<ICustomerRepository, CustomerRepository>();
+        services.AddScoped<IOrderStatusRepository, OrderStatusRepository>();
+        services.AddScoped<IOrderTypeRepository, OrderTypeRepository>();
+        services.AddScoped<IOrderItemRepository, OrderItemRepository>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<ISupplierRepository, SupplierRepository>();
     }
 }

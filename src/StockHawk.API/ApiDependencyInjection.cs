@@ -22,7 +22,7 @@ public static class ApiDependencyInjection
         {
             var OATH2 = "oauth2";
 
-            // Enabled OAuth security in Swagger. From here: https://stackoverflow.com/questions/66894523/swagger-not-able-to-authenticate-to-azure-ad-b2c
+            // Ref Enabled OAuth security in Swagger. From here: https://stackoverflow.com/questions/66894523/swagger-not-able-to-authenticate-to-azure-ad-b2c
             c.AddSecurityRequirement(new OpenApiSecurityRequirement()
             {
                 {
@@ -46,7 +46,7 @@ public static class ApiDependencyInjection
                     Implicit = oAuthFlow
                 }
             });
-            setupAction?.Invoke(c); // TODO has to be tested.
+            setupAction?.Invoke(c);
         });
     }
 }

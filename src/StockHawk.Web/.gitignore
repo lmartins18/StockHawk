@@ -21,3 +21,9 @@ dev-dist
 *.suo
 *.ntvs*
 *.sw?
+# Cypress
+cypress.env.json
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
