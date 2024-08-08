@@ -5,12 +5,13 @@ import mkcert from "vite-plugin-mkcert";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    host: true,
+  },
   plugins: [
     react(),
     VitePWA({
-      registerType: "prompt",
-      injectRegister: false,
-
+      registerType: "autoUpdate",
       pwaAssets: {
         disabled: false,
         config: true,
