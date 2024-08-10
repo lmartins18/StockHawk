@@ -174,6 +174,7 @@ export const AddOrderDialog: React.FC<AddOrderDialogProps> = ({ open, onClose, o
                                 register={register}
                                 errors={errors}
                                 integerOnly={false}
+                                minValue={0}
                             />
                         </FormControl>
                         <FormControl fullWidth margin="dense" error={!!errors.orderStatusId}>

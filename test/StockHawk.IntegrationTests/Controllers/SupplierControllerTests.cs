@@ -296,9 +296,7 @@ namespace StockHawk.IntegrationTests.Controllers
         // Helper method to get product IDs by supplier
         private async Task<List<int>> GetProductIdsBySupplierAsync(int supplierId)
         {
-            // Simulating getting products by supplier. 
-            // Adjust this based on how you create products in your test
-            var response = await Client.GetAsync($"/api/products"); // Assuming this retrieves all products
+            var response = await Client.GetAsync($"/api/products");
             response.EnsureSuccessStatusCode();
             var products = await response.Content.ReadFromJsonAsync<IEnumerable<ProductDto>>();
 
